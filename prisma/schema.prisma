@@ -5,11 +5,111 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
 }
 
 datasource db {
   provider = "mysql"
-  url = env("DATABASE_URL")
+}
+
+model Film {
+  id             Int     @id @default(autoincrement())
+  tmdb_id        Int     @unique
+  title          String
+  original_title String
+  slug           String
+  overview       String?  @db.Text 
+  poster_path    String?
+  backdrop_path  String?
+  release_date   DateTime?
+  type           FilmType
+  status         FilmStatus
+  rating         Float?
+  vote_count     Int?
+  popularity     Float?
+  runtime        Int?
+  trailer_key    String?    @db.VarChar(50)
+  is_active      Boolean    @default(true)
+  created_at     DateTime   @default(now())
+  updated_at     DateTime   @updatedAt
+
+  seasons   Season[]
+  genres    FilmGenre[]
+  directors Json?
+  cast      Json?
+}
+
+model Season {
+  id             Int    @id @default(autoincrement())
+  tmdb_season_id Int    @unique
+  film_id        Int
+  season_number  Int
+  name           String
+  overview       String?
+  poster_path    String?
+  air_date       DateTime?
+  episode_count  Int?
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
+
+  film     Film      @relation(fields: [film_id], references: [id])
+  episodes Episode[]
+}
+
+model Episode {
+  id              Int    @id @default(autoincrement())
+  tmdb_episode_id Int    @unique
+  season_id       Int
+  episode_number  Int
+  name            String
+  overview        String?
+  runtime         Int?
+  air_date        DateTime?
+  still_path      String?
+  video_key       String?   @db.VarChar(50)
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+
+  season Season        @relation(fields: [season_id], references: [id])
+  views  EpisodeView[]
+}
+
+model Genre {
+  id      Int @id @default(autoincrement())
+  tmdb_id Int @unique
+  name    String @db.VarChar(100)
+
+  films FilmGenre[]
+}
+
+model FilmGenre {
+  film_id  Int
+  genre_id Int
+
+  film  Film  @relation(fields: [film_id], references: [id])
+  genre Genre @relation(fields: [genre_id], references: [id])
+
+  @@id([film_id, genre_id])
+}
+
+model EpisodeView {
+  id         Int   @id @default(autoincrement())
+  episode_id Int
+  view_date  DateTime
+  views      Int      @default(1)
+
+  episode Episode @relation(fields: [episode_id], references: [id])
+}
+
+// ENUMs
+enum FilmType {
+  movie
+  tv
+}
+
+enum FilmStatus {
+  ongoing
+  completed
 }
