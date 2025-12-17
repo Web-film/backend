@@ -6,9 +6,21 @@ import { TasksService } from '@src/tasks/tasks.service';
 export class FilmsSyncTask {
   constructor(private readonly tasksService: TasksService) {}
 
-  // @Cron(CronExpression.EVERY_DAY_AT_11PM)
-  @Cron(CronExpression.EVERY_10_SECONDS)
-  async handleSync() {
+  @Cron('5 0 * * *')
+  // @Cron(CronExpression.EVERY_10_SECONDS)
+  async handleSyncMovie() {
     return this.tasksService.syncMovies();
+  }
+
+  @Cron(CronExpression.EVERY_DAY_AT_1AM)
+  // @Cron(CronExpression.EVERY_10_SECONDS)
+  async handleSyncTv() {
+    return this.tasksService.syncTvs();
+  }
+
+  @Cron(CronExpression.EVERY_DAY_AT_1AM)
+  // @Cron(CronExpression.EVERY_10_SECONDS)
+  async syncDirectorsAndCast() {
+    return this.tasksService.syncDirectorsAndCast();
   }
 }

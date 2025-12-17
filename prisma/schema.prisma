@@ -15,12 +15,12 @@ datasource db {
 }
 
 model Film {
-  id             Int     @id @default(autoincrement())
-  tmdb_id        Int     @unique
+  id             Int        @id @default(autoincrement())
+  tmdb_id        Int        @unique
   title          String
   original_title String
   slug           String
-  overview       String?  @db.Text 
+  overview       String?    @db.Text
   poster_path    String?
   backdrop_path  String?
   release_date   DateTime?
@@ -42,8 +42,8 @@ model Film {
 }
 
 model Season {
-  id             Int    @id @default(autoincrement())
-  tmdb_season_id Int    @unique
+  id             Int       @id @default(autoincrement())
+  tmdb_season_id Int       @unique
   film_id        Int
   season_number  Int
   name           String
@@ -59,12 +59,12 @@ model Season {
 }
 
 model Episode {
-  id              Int    @id @default(autoincrement())
-  tmdb_episode_id Int    @unique
+  id              Int       @id @default(autoincrement())
+  tmdb_episode_id Int       @unique
   season_id       Int
   episode_number  Int
   name            String
-  overview        String?
+  overview        String?   @db.Text
   runtime         Int?
   air_date        DateTime?
   still_path      String?
@@ -77,8 +77,8 @@ model Episode {
 }
 
 model Genre {
-  id      Int @id @default(autoincrement())
-  tmdb_id Int @unique
+  id      Int    @id @default(autoincrement())
+  tmdb_id Int    @unique
   name    String @db.VarChar(100)
 
   films FilmGenre[]
@@ -95,7 +95,7 @@ model FilmGenre {
 }
 
 model EpisodeView {
-  id         Int   @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   episode_id Int
   view_date  DateTime
   views      Int      @default(1)

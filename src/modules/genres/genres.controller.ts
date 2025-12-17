@@ -1,5 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { CreateGenreDto } from '@src/modules/genres/dto/create-genres.dto';
+import { Body, Controller, Get } from '@nestjs/common';
 import { GenresService } from '@src/modules/genres/genres.service';
 
 @Controller('genres')
@@ -9,6 +8,11 @@ export class GenresController {
   @Get()
   getGenres() {
     return this.genresService.getGenres();
+  }
+
+  @Get('/many')
+  findManyByTmdbIds(genreIds: number[]) {
+    return this.genresService.findManyByTmdbIds(genreIds);
   }
   // @Post()
   // createGenres(@Body() body: CreateGenreDto) {
