@@ -1,11 +1,52 @@
 import { Injectable } from '@nestjs/common';
 import { TmdbSeason } from '@src/integrations/tmdb/tmdb.types';
+import {
+  GetSeasonsByFilmDto,
+  GetSeasonsDto,
+} from '@src/modules/seasons/dto/getDto.dto';
 import { PrismaService } from '@src/prisma.service';
 
 @Injectable()
 export class SeasonsService {
   constructor(private prisma: PrismaService) {}
 
+  async getSeasons(query: GetSeasonsDto) {
+    const limit = query?.limit || 20;
+    const page = query?.page || 1;
+    const skip = (page - 1) * limit;
+
+    const [total, items] = await Promise.all([
+      this.prisma.season.count(),
+      this.prisma.season.findMany({
+        take: limit,
+        skip,
+        orderBy: { created_at: 'desc' },
+      }),
+    ]);
+
+    const hasNextPage = page * limit < total;
+
+    return {
+      items,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+        hasNextPage,
+      },
+    };
+  }
+
+  async getSeasonsByFilm(query: GetSeasonsByFilmDto) {
+    const film = await this.prisma.season.findMany({
+      where: { film_id: query.film_id },
+    });
+
+    return film;
+  }
+
+  // cron
   async getTodaySeasons() {
     const start = new Date();
     start.setDate(start.getDate() - 1);

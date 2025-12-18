@@ -163,3 +163,22 @@ export interface TmdbCredits {
     profile_path: string | null;
   }[];
 }
+
+export interface TmdbVideo {
+  id: string;
+  key: string;
+  name: string;
+  site: string;
+  type: string;
+  official: boolean;
+  published_at: string;
+}
+
+export interface TmdbVideoResponse {
+  id: number;
+  results: TmdbVideo[];
+}
+
+export interface TmdbMovieRuntime {
+  runtime: number | null;
+}

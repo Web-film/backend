@@ -238,4 +238,128 @@ export class TasksService {
 
     console.log('Done sync directors and cast');
   }
+
+  // Xử lý cron lấy ra trailer phim cũng là video phim đối với phim lẻ
+  async syncMovieTrailers() {
+    console.log('Start cron sync movie trailers');
+
+    const today = new Date();
+    const startOfDay = new Date(today);
+    startOfDay.setDate(startOfDay.getDate() - 1);
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date(today);
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const movies = await this.prisma.film.findMany({
+      where: {
+        type: 'movie',
+        created_at: {
+          gte: startOfDay,
+          lte: endOfDay,
+        },
+      },
+      select: { id: true, tmdb_id: true },
+    });
+
+    for (const movie of movies) {
+      try {
+        const trailerKey = await this.tmdbService.getMovieTrailer(
+          movie.tmdb_id,
+        );
+
+        await this.prisma.film.update({
+          where: { id: movie.id },
+          data: {
+            trailer_key: trailerKey ?? '',
+          },
+        });
+      } catch (error) {
+        console.error(`Sync trailer failed for movie ${movie.tmdb_id}`, error);
+      }
+    }
+
+    console.log('Done sync movie trailers');
+  }
+
+  // Xử lý cron lấy ra trailer phim cũng là video phim đối với phim bộ
+  async syncTvTrailers() {
+    console.log('Start cron sync movie trailers');
+
+    const today = new Date();
+    const startOfDay = new Date(today);
+    startOfDay.setDate(startOfDay.getDate() - 1);
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date(today);
+    endOfDay.setHours(23, 59, 59, 999);
+    const tvs = await this.prisma.film.findMany({
+      where: {
+        type: 'tv',
+        created_at: {
+          gte: startOfDay,
+          lte: endOfDay,
+        },
+      },
+      select: { id: true, tmdb_id: true },
+    });
+
+    for (const tv of tvs) {
+      try {
+        const trailerKey = await this.tmdbService.getTvTrailer(tv.tmdb_id);
+
+        await this.prisma.film.update({
+          where: { id: tv.id },
+          data: { trailer_key: trailerKey ?? '' },
+        });
+      } catch (err) {
+        console.error(`Sync trailer failed for TV ${tv.tmdb_id}`, err);
+      }
+    }
+    console.log('Done sync tv trailers');
+  }
+
+  // cron xử lý runtime với movie
+  async syncMovieRuntimes() {
+    console.log('Start cron syncMovieRuntimes');
+    const today = new Date();
+    const startOfDay = new Date(today);
+    startOfDay.setDate(startOfDay.getDate() - 1);
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date(today);
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const movies = await this.prisma.film.findMany({
+      where: {
+        type: 'movie',
+        created_at: {
+          gte: startOfDay,
+          lte: endOfDay,
+        },
+      },
+      select: {
+        id: true,
+        tmdb_id: true,
+        runtime: true,
+      },
+    });
+
+    for (const movie of movies) {
+      try {
+        const runtime = await this.tmdbService.getRuntimeMovie(movie.tmdb_id);
+
+        await this.prisma.film.update({
+          where: { id: movie.id },
+          data: {
+            runtime: runtime,
+          },
+        });
+      } catch (error) {
+        console.error(`Sync runtime failed for movie ${movie.tmdb_id}`, error);
+      }
+    }
+
+    console.log('Done syncMovieRuntimes');
+  }
 }

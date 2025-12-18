@@ -4,9 +4,11 @@ import {
   TmdbEpisode,
   TmdbGenreResponse,
   TmdbMovieResponse,
+  TmdbMovieRuntime,
   TmdbSeasonDetail,
   TmdbSeasonRes,
   TmdbTrendingMovieResponse,
+  TmdbVideoResponse,
 } from '@src/integrations/tmdb/tmdb.types';
 import { Gaxios } from 'gaxios';
 
@@ -133,5 +135,52 @@ export class TmdbService {
     const cast = res.data.cast.sort((a, b) => a.order - b.order).slice(0, 10);
 
     return { directors, cast };
+  }
+
+  // lấy ra trailer phim lẻ
+  async getMovieTrailer(tmdbId: number): Promise<string | null> {
+    const res = await this.client.request<TmdbVideoResponse>({
+      url: `movie/${tmdbId}/videos`,
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${process.env.TMDB_ACCESS_TOKEN}`,
+      },
+    });
+
+    const trailer = res.data.results.find(
+      (v) => v.type === 'Trailer' && v.site === 'YouTube',
+    );
+
+    return trailer ? trailer.key : null;
+  }
+
+  // lấy ra trailer phim bộ
+  async getTvTrailer(tmdbId: number): Promise<string | null> {
+    const res = await this.client.request<TmdbVideoResponse>({
+      url: `tv/${tmdbId}/videos`,
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${process.env.TMDB_ACCESS_TOKEN}`,
+      },
+    });
+
+    const trailer = res.data.results.find(
+      (v) => v.type === 'Trailer' && v.site === 'YouTube',
+    );
+
+    return trailer ? trailer.key : null;
+  }
+
+  // lấy ra thời gian phim lẻ
+  async getRuntimeMovie(tmdbId: number): Promise<number | null> {
+    const res = await this.client.request<TmdbMovieRuntime>({
+      url: `movie/${tmdbId}`,
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${process.env.TMDB_ACCESS_TOKEN}`,
+      },
+    });
+
+    return res.data?.runtime ?? null;
   }
 }

@@ -3,6 +3,11 @@ import { Prisma } from '@src/generated/prisma/client';
 import { FilmType } from '@src/generated/prisma/enums';
 import { TmdbMovie } from '@src/integrations/tmdb/tmdb.types';
 import { FilmGenresService } from '@src/modules/film-genres/film-genres.service';
+import {
+  GetFilmDto,
+  GetFilmNewDto,
+  GetFilmPopularDto,
+} from '@src/modules/films/dto/getDto.dto';
 import { GenresService } from '@src/modules/genres/genres.service';
 import { PrismaService } from '@src/prisma.service';
 
@@ -14,6 +19,120 @@ export class FilmsService {
     private prisma: PrismaService,
   ) {}
 
+  async getFilm(query: GetFilmDto) {
+    const limit = query?.limit || 20;
+    const page = query?.page || 1;
+    const skip = (page - 1) * limit;
+
+    const where: Prisma.FilmWhereInput = {
+      type: 'movie',
+      is_active: true,
+      ...(query.type ? { type: query.type } : {}),
+      ...(query.genreId
+        ? {
+            genres: {
+              some: {
+                genre_id: query.genreId,
+              },
+            },
+          }
+        : {}),
+    };
+
+    const [total, items] = await Promise.all([
+      this.prisma.film.count({ where }),
+      this.prisma.film.findMany({
+        where,
+        take: limit,
+        skip,
+        orderBy: { created_at: 'desc' },
+        include: {
+          genres: { include: { genre: true } },
+        },
+      }),
+    ]);
+
+    const hasNextPage = page * limit < total;
+
+    return {
+      items,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+        hasNextPage,
+      },
+    };
+  }
+
+  async getFilmNew(query: GetFilmPopularDto) {
+    const limit = query?.limit || 20;
+    const page = query?.page || 1;
+    const skip = (page - 1) * limit;
+
+    const [total, items] = await Promise.all([
+      this.prisma.film.count(),
+      this.prisma.film.findMany({
+        take: limit,
+        skip: skip,
+        orderBy: { release_date: 'desc' },
+      }),
+    ]);
+    const hasNextPage = page * limit < total;
+    return {
+      items,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+        hasNextPage,
+      },
+    };
+  }
+
+  async getFilmPopular(query: GetFilmNewDto) {
+    const limit = query?.limit || 20;
+    const page = query?.page || 1;
+    const skip = (page - 1) * limit;
+
+    const [total, items] = await Promise.all([
+      this.prisma.film.count(),
+      this.prisma.film.findMany({
+        take: limit,
+        skip: skip,
+        orderBy: { popularity: 'desc' },
+      }),
+    ]);
+    const hasNextPage = page * limit < total;
+    return {
+      items,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+        hasNextPage,
+      },
+    };
+  }
+
+  async getFilmDetail(id: number) {
+    const film = await this.prisma.film.findUnique({
+      where: { id },
+      include: {
+        genres: { include: { genre: true } },
+        seasons: {
+          include: { episodes: true },
+        },
+      },
+    });
+
+    return film;
+  }
+
+  // Phần cron
   async getLastReleaseDate(type?: FilmType): Promise<Date | null> {
     const film = await this.prisma.film.findFirst({
       where: {
