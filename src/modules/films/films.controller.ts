@@ -3,6 +3,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Put,
   Query,
   ValidationPipe,
 } from '@nestjs/common';
@@ -39,7 +40,7 @@ export class FilmsController {
     }
   }
 
-  @Get(':id')
+  @Get('/:id')
   async getFilmDetail(@Param('id', ParseIntPipe) id: number) {
     try {
       const film = await this.filmsService.getFilmDetail(id);
@@ -105,5 +106,24 @@ export class FilmsController {
   @Get('/getLast')
   getLastReleaseDate() {
     return this.filmsService.getLastReleaseDate();
+  }
+
+  @Put('/increaseView/:id')
+  async increaseViewEpisodes(@Param('id') id: string) {
+    try {
+      const data = await this.filmsService.increaseViewFilm(id);
+
+      return {
+        status: 200,
+        message: 'Tăng view phim của mùa thành công',
+        data,
+      };
+    } catch (error) {
+      return {
+        status: 404,
+        message: 'Tăng view phim của mùa thất bại',
+        error: (error as Error).message,
+      };
+    }
   }
 }

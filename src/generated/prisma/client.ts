@@ -63,7 +63,7 @@ export type Genre = Prisma.GenreModel
  */
 export type FilmGenre = Prisma.FilmGenreModel
 /**
- * Model EpisodeView
+ * Model FilmDailyView
  * 
  */
-export type EpisodeView = Prisma.EpisodeViewModel
+export type FilmDailyView = Prisma.FilmDailyViewModel

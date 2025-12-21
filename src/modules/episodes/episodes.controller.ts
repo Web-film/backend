@@ -1,4 +1,11 @@
-import { Controller, Get, Query, ValidationPipe } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Put,
+  Query,
+  ValidationPipe,
+} from '@nestjs/common';
 import {
   GetEpisodeBySeasonDto,
   GetEpisodeDto,
@@ -48,6 +55,25 @@ export class EpisodesController {
       return {
         status: 404,
         message: 'Lấy danh sách các tập phim của mùa thất bại',
+        error: (error as Error).message,
+      };
+    }
+  }
+
+  @Put('/increaseView/:id')
+  async increaseViewEpisodes(@Param('id') id: string) {
+    try {
+      const data = await this.episodesService.increaseViewEpisodes(id);
+
+      return {
+        status: 200,
+        message: 'Tăng view tập phim của mùa thành công',
+        data,
+      };
+    } catch (error) {
+      return {
+        status: 404,
+        message: 'Tăng view tập phim của mùa thất bại',
         error: (error as Error).message,
       };
     }

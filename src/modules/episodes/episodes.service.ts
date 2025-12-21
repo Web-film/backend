@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { TmdbEpisode } from '@src/integrations/tmdb/tmdb.types';
 import {
   GetEpisodeBySeasonDto,
@@ -39,11 +39,56 @@ export class EpisodesService {
   }
 
   async getEpisodeBySeason(query: GetEpisodeBySeasonDto) {
-    const film = await this.prisma.episode.findMany({
+    const season = await this.prisma.episode.findMany({
       where: { season_id: query.season_id },
     });
 
-    return film;
+    return season;
+  }
+
+  async increaseViewEpisodes(id: string) {
+    const episodeId = Number(id);
+    if (Number.isNaN(episodeId)) {
+      throw new BadRequestException('id tập không hợp lệ');
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    return await this.prisma.$transaction(async (tx) => {
+      const episode = await tx.episode.update({
+        where: { id: episodeId },
+        data: {
+          views: { increment: 1 },
+        },
+      });
+
+      const season = await tx.season.findUnique({
+        where: { id: episode.season_id },
+        select: { film_id: true },
+      });
+
+      if (!season) return episode;
+
+      await tx.filmDailyView.upsert({
+        where: {
+          film_id_view_date: {
+            film_id: season.film_id,
+            view_date: today,
+          },
+        },
+        update: {
+          views: { increment: 1 },
+        },
+        create: {
+          film_id: season.film_id,
+          view_date: today,
+          views: 1,
+        },
+      });
+
+      return episode;
+    });
   }
 
   // cron

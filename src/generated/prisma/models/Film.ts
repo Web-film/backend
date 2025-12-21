@@ -33,6 +33,7 @@ export type FilmAvgAggregateOutputType = {
   vote_count: number | null
   popularity: number | null
   runtime: number | null
+  views: number | null
 }
 
 export type FilmSumAggregateOutputType = {
@@ -42,6 +43,7 @@ export type FilmSumAggregateOutputType = {
   vote_count: number | null
   popularity: number | null
   runtime: number | null
+  views: number | null
 }
 
 export type FilmMinAggregateOutputType = {
@@ -60,6 +62,7 @@ export type FilmMinAggregateOutputType = {
   vote_count: number | null
   popularity: number | null
   runtime: number | null
+  views: number | null
   trailer_key: string | null
   is_active: boolean | null
   created_at: Date | null
@@ -82,6 +85,7 @@ export type FilmMaxAggregateOutputType = {
   vote_count: number | null
   popularity: number | null
   runtime: number | null
+  views: number | null
   trailer_key: string | null
   is_active: boolean | null
   created_at: Date | null
@@ -104,6 +108,7 @@ export type FilmCountAggregateOutputType = {
   vote_count: number
   popularity: number
   runtime: number
+  views: number
   trailer_key: number
   is_active: number
   created_at: number
@@ -121,6 +126,7 @@ export type FilmAvgAggregateInputType = {
   vote_count?: true
   popularity?: true
   runtime?: true
+  views?: true
 }
 
 export type FilmSumAggregateInputType = {
@@ -130,6 +136,7 @@ export type FilmSumAggregateInputType = {
   vote_count?: true
   popularity?: true
   runtime?: true
+  views?: true
 }
 
 export type FilmMinAggregateInputType = {
@@ -148,6 +155,7 @@ export type FilmMinAggregateInputType = {
   vote_count?: true
   popularity?: true
   runtime?: true
+  views?: true
   trailer_key?: true
   is_active?: true
   created_at?: true
@@ -170,6 +178,7 @@ export type FilmMaxAggregateInputType = {
   vote_count?: true
   popularity?: true
   runtime?: true
+  views?: true
   trailer_key?: true
   is_active?: true
   created_at?: true
@@ -192,6 +201,7 @@ export type FilmCountAggregateInputType = {
   vote_count?: true
   popularity?: true
   runtime?: true
+  views?: true
   trailer_key?: true
   is_active?: true
   created_at?: true
@@ -303,6 +313,7 @@ export type FilmGroupByOutputType = {
   vote_count: number | null
   popularity: number | null
   runtime: number | null
+  views: number
   trailer_key: string | null
   is_active: boolean
   created_at: Date
@@ -350,6 +361,7 @@ export type FilmWhereInput = {
   vote_count?: Prisma.IntNullableFilter<"Film"> | number | null
   popularity?: Prisma.FloatNullableFilter<"Film"> | number | null
   runtime?: Prisma.IntNullableFilter<"Film"> | number | null
+  views?: Prisma.IntFilter<"Film"> | number
   trailer_key?: Prisma.StringNullableFilter<"Film"> | string | null
   is_active?: Prisma.BoolFilter<"Film"> | boolean
   created_at?: Prisma.DateTimeFilter<"Film"> | Date | string
@@ -358,6 +370,7 @@ export type FilmWhereInput = {
   cast?: Prisma.JsonNullableFilter<"Film">
   seasons?: Prisma.SeasonListRelationFilter
   genres?: Prisma.FilmGenreListRelationFilter
+  filmDailyViews?: Prisma.FilmDailyViewListRelationFilter
 }
 
 export type FilmOrderByWithRelationInput = {
@@ -376,6 +389,7 @@ export type FilmOrderByWithRelationInput = {
   vote_count?: Prisma.SortOrderInput | Prisma.SortOrder
   popularity?: Prisma.SortOrderInput | Prisma.SortOrder
   runtime?: Prisma.SortOrderInput | Prisma.SortOrder
+  views?: Prisma.SortOrder
   trailer_key?: Prisma.SortOrderInput | Prisma.SortOrder
   is_active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -384,6 +398,7 @@ export type FilmOrderByWithRelationInput = {
   cast?: Prisma.SortOrderInput | Prisma.SortOrder
   seasons?: Prisma.SeasonOrderByRelationAggregateInput
   genres?: Prisma.FilmGenreOrderByRelationAggregateInput
+  filmDailyViews?: Prisma.FilmDailyViewOrderByRelationAggregateInput
   _relevance?: Prisma.FilmOrderByRelevanceInput
 }
 
@@ -406,6 +421,7 @@ export type FilmWhereUniqueInput = Prisma.AtLeast<{
   vote_count?: Prisma.IntNullableFilter<"Film"> | number | null
   popularity?: Prisma.FloatNullableFilter<"Film"> | number | null
   runtime?: Prisma.IntNullableFilter<"Film"> | number | null
+  views?: Prisma.IntFilter<"Film"> | number
   trailer_key?: Prisma.StringNullableFilter<"Film"> | string | null
   is_active?: Prisma.BoolFilter<"Film"> | boolean
   created_at?: Prisma.DateTimeFilter<"Film"> | Date | string
@@ -414,6 +430,7 @@ export type FilmWhereUniqueInput = Prisma.AtLeast<{
   cast?: Prisma.JsonNullableFilter<"Film">
   seasons?: Prisma.SeasonListRelationFilter
   genres?: Prisma.FilmGenreListRelationFilter
+  filmDailyViews?: Prisma.FilmDailyViewListRelationFilter
 }, "id" | "tmdb_id">
 
 export type FilmOrderByWithAggregationInput = {
@@ -432,6 +449,7 @@ export type FilmOrderByWithAggregationInput = {
   vote_count?: Prisma.SortOrderInput | Prisma.SortOrder
   popularity?: Prisma.SortOrderInput | Prisma.SortOrder
   runtime?: Prisma.SortOrderInput | Prisma.SortOrder
+  views?: Prisma.SortOrder
   trailer_key?: Prisma.SortOrderInput | Prisma.SortOrder
   is_active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -464,6 +482,7 @@ export type FilmScalarWhereWithAggregatesInput = {
   vote_count?: Prisma.IntNullableWithAggregatesFilter<"Film"> | number | null
   popularity?: Prisma.FloatNullableWithAggregatesFilter<"Film"> | number | null
   runtime?: Prisma.IntNullableWithAggregatesFilter<"Film"> | number | null
+  views?: Prisma.IntWithAggregatesFilter<"Film"> | number
   trailer_key?: Prisma.StringNullableWithAggregatesFilter<"Film"> | string | null
   is_active?: Prisma.BoolWithAggregatesFilter<"Film"> | boolean
   created_at?: Prisma.DateTimeWithAggregatesFilter<"Film"> | Date | string
@@ -487,6 +506,7 @@ export type FilmCreateInput = {
   vote_count?: number | null
   popularity?: number | null
   runtime?: number | null
+  views?: number
   trailer_key?: string | null
   is_active?: boolean
   created_at?: Date | string
@@ -495,6 +515,7 @@ export type FilmCreateInput = {
   cast?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   seasons?: Prisma.SeasonCreateNestedManyWithoutFilmInput
   genres?: Prisma.FilmGenreCreateNestedManyWithoutFilmInput
+  filmDailyViews?: Prisma.FilmDailyViewCreateNestedManyWithoutFilmInput
 }
 
 export type FilmUncheckedCreateInput = {
@@ -513,6 +534,7 @@ export type FilmUncheckedCreateInput = {
   vote_count?: number | null
   popularity?: number | null
   runtime?: number | null
+  views?: number
   trailer_key?: string | null
   is_active?: boolean
   created_at?: Date | string
@@ -521,6 +543,7 @@ export type FilmUncheckedCreateInput = {
   cast?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   seasons?: Prisma.SeasonUncheckedCreateNestedManyWithoutFilmInput
   genres?: Prisma.FilmGenreUncheckedCreateNestedManyWithoutFilmInput
+  filmDailyViews?: Prisma.FilmDailyViewUncheckedCreateNestedManyWithoutFilmInput
 }
 
 export type FilmUpdateInput = {
@@ -538,6 +561,7 @@ export type FilmUpdateInput = {
   vote_count?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   popularity?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   runtime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  views?: Prisma.IntFieldUpdateOperationsInput | number
   trailer_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -546,6 +570,7 @@ export type FilmUpdateInput = {
   cast?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   seasons?: Prisma.SeasonUpdateManyWithoutFilmNestedInput
   genres?: Prisma.FilmGenreUpdateManyWithoutFilmNestedInput
+  filmDailyViews?: Prisma.FilmDailyViewUpdateManyWithoutFilmNestedInput
 }
 
 export type FilmUncheckedUpdateInput = {
@@ -564,6 +589,7 @@ export type FilmUncheckedUpdateInput = {
   vote_count?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   popularity?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   runtime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  views?: Prisma.IntFieldUpdateOperationsInput | number
   trailer_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -572,6 +598,7 @@ export type FilmUncheckedUpdateInput = {
   cast?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   seasons?: Prisma.SeasonUncheckedUpdateManyWithoutFilmNestedInput
   genres?: Prisma.FilmGenreUncheckedUpdateManyWithoutFilmNestedInput
+  filmDailyViews?: Prisma.FilmDailyViewUncheckedUpdateManyWithoutFilmNestedInput
 }
 
 export type FilmCreateManyInput = {
@@ -590,6 +617,7 @@ export type FilmCreateManyInput = {
   vote_count?: number | null
   popularity?: number | null
   runtime?: number | null
+  views?: number
   trailer_key?: string | null
   is_active?: boolean
   created_at?: Date | string
@@ -613,6 +641,7 @@ export type FilmUpdateManyMutationInput = {
   vote_count?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   popularity?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   runtime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  views?: Prisma.IntFieldUpdateOperationsInput | number
   trailer_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -637,6 +666,7 @@ export type FilmUncheckedUpdateManyInput = {
   vote_count?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   popularity?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   runtime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  views?: Prisma.IntFieldUpdateOperationsInput | number
   trailer_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -667,6 +697,7 @@ export type FilmCountOrderByAggregateInput = {
   vote_count?: Prisma.SortOrder
   popularity?: Prisma.SortOrder
   runtime?: Prisma.SortOrder
+  views?: Prisma.SortOrder
   trailer_key?: Prisma.SortOrder
   is_active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -682,6 +713,7 @@ export type FilmAvgOrderByAggregateInput = {
   vote_count?: Prisma.SortOrder
   popularity?: Prisma.SortOrder
   runtime?: Prisma.SortOrder
+  views?: Prisma.SortOrder
 }
 
 export type FilmMaxOrderByAggregateInput = {
@@ -700,6 +732,7 @@ export type FilmMaxOrderByAggregateInput = {
   vote_count?: Prisma.SortOrder
   popularity?: Prisma.SortOrder
   runtime?: Prisma.SortOrder
+  views?: Prisma.SortOrder
   trailer_key?: Prisma.SortOrder
   is_active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -722,6 +755,7 @@ export type FilmMinOrderByAggregateInput = {
   vote_count?: Prisma.SortOrder
   popularity?: Prisma.SortOrder
   runtime?: Prisma.SortOrder
+  views?: Prisma.SortOrder
   trailer_key?: Prisma.SortOrder
   is_active?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -735,6 +769,7 @@ export type FilmSumOrderByAggregateInput = {
   vote_count?: Prisma.SortOrder
   popularity?: Prisma.SortOrder
   runtime?: Prisma.SortOrder
+  views?: Prisma.SortOrder
 }
 
 export type FilmScalarRelationFilter = {
@@ -822,6 +857,20 @@ export type FilmUpdateOneRequiredWithoutGenresNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.FilmUpdateToOneWithWhereWithoutGenresInput, Prisma.FilmUpdateWithoutGenresInput>, Prisma.FilmUncheckedUpdateWithoutGenresInput>
 }
 
+export type FilmCreateNestedOneWithoutFilmDailyViewsInput = {
+  create?: Prisma.XOR<Prisma.FilmCreateWithoutFilmDailyViewsInput, Prisma.FilmUncheckedCreateWithoutFilmDailyViewsInput>
+  connectOrCreate?: Prisma.FilmCreateOrConnectWithoutFilmDailyViewsInput
+  connect?: Prisma.FilmWhereUniqueInput
+}
+
+export type FilmUpdateOneRequiredWithoutFilmDailyViewsNestedInput = {
+  create?: Prisma.XOR<Prisma.FilmCreateWithoutFilmDailyViewsInput, Prisma.FilmUncheckedCreateWithoutFilmDailyViewsInput>
+  connectOrCreate?: Prisma.FilmCreateOrConnectWithoutFilmDailyViewsInput
+  upsert?: Prisma.FilmUpsertWithoutFilmDailyViewsInput
+  connect?: Prisma.FilmWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FilmUpdateToOneWithWhereWithoutFilmDailyViewsInput, Prisma.FilmUpdateWithoutFilmDailyViewsInput>, Prisma.FilmUncheckedUpdateWithoutFilmDailyViewsInput>
+}
+
 export type FilmCreateWithoutSeasonsInput = {
   tmdb_id: number
   title: string
@@ -837,6 +886,7 @@ export type FilmCreateWithoutSeasonsInput = {
   vote_count?: number | null
   popularity?: number | null
   runtime?: number | null
+  views?: number
   trailer_key?: string | null
   is_active?: boolean
   created_at?: Date | string
@@ -844,6 +894,7 @@ export type FilmCreateWithoutSeasonsInput = {
   directors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   cast?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   genres?: Prisma.FilmGenreCreateNestedManyWithoutFilmInput
+  filmDailyViews?: Prisma.FilmDailyViewCreateNestedManyWithoutFilmInput
 }
 
 export type FilmUncheckedCreateWithoutSeasonsInput = {
@@ -862,6 +913,7 @@ export type FilmUncheckedCreateWithoutSeasonsInput = {
   vote_count?: number | null
   popularity?: number | null
   runtime?: number | null
+  views?: number
   trailer_key?: string | null
   is_active?: boolean
   created_at?: Date | string
@@ -869,6 +921,7 @@ export type FilmUncheckedCreateWithoutSeasonsInput = {
   directors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   cast?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   genres?: Prisma.FilmGenreUncheckedCreateNestedManyWithoutFilmInput
+  filmDailyViews?: Prisma.FilmDailyViewUncheckedCreateNestedManyWithoutFilmInput
 }
 
 export type FilmCreateOrConnectWithoutSeasonsInput = {
@@ -902,6 +955,7 @@ export type FilmUpdateWithoutSeasonsInput = {
   vote_count?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   popularity?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   runtime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  views?: Prisma.IntFieldUpdateOperationsInput | number
   trailer_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -909,6 +963,7 @@ export type FilmUpdateWithoutSeasonsInput = {
   directors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   cast?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   genres?: Prisma.FilmGenreUpdateManyWithoutFilmNestedInput
+  filmDailyViews?: Prisma.FilmDailyViewUpdateManyWithoutFilmNestedInput
 }
 
 export type FilmUncheckedUpdateWithoutSeasonsInput = {
@@ -927,6 +982,7 @@ export type FilmUncheckedUpdateWithoutSeasonsInput = {
   vote_count?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   popularity?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   runtime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  views?: Prisma.IntFieldUpdateOperationsInput | number
   trailer_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -934,6 +990,7 @@ export type FilmUncheckedUpdateWithoutSeasonsInput = {
   directors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   cast?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   genres?: Prisma.FilmGenreUncheckedUpdateManyWithoutFilmNestedInput
+  filmDailyViews?: Prisma.FilmDailyViewUncheckedUpdateManyWithoutFilmNestedInput
 }
 
 export type FilmCreateWithoutGenresInput = {
@@ -951,6 +1008,7 @@ export type FilmCreateWithoutGenresInput = {
   vote_count?: number | null
   popularity?: number | null
   runtime?: number | null
+  views?: number
   trailer_key?: string | null
   is_active?: boolean
   created_at?: Date | string
@@ -958,6 +1016,7 @@ export type FilmCreateWithoutGenresInput = {
   directors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   cast?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   seasons?: Prisma.SeasonCreateNestedManyWithoutFilmInput
+  filmDailyViews?: Prisma.FilmDailyViewCreateNestedManyWithoutFilmInput
 }
 
 export type FilmUncheckedCreateWithoutGenresInput = {
@@ -976,6 +1035,7 @@ export type FilmUncheckedCreateWithoutGenresInput = {
   vote_count?: number | null
   popularity?: number | null
   runtime?: number | null
+  views?: number
   trailer_key?: string | null
   is_active?: boolean
   created_at?: Date | string
@@ -983,6 +1043,7 @@ export type FilmUncheckedCreateWithoutGenresInput = {
   directors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   cast?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   seasons?: Prisma.SeasonUncheckedCreateNestedManyWithoutFilmInput
+  filmDailyViews?: Prisma.FilmDailyViewUncheckedCreateNestedManyWithoutFilmInput
 }
 
 export type FilmCreateOrConnectWithoutGenresInput = {
@@ -1016,6 +1077,7 @@ export type FilmUpdateWithoutGenresInput = {
   vote_count?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   popularity?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   runtime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  views?: Prisma.IntFieldUpdateOperationsInput | number
   trailer_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1023,6 +1085,7 @@ export type FilmUpdateWithoutGenresInput = {
   directors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   cast?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   seasons?: Prisma.SeasonUpdateManyWithoutFilmNestedInput
+  filmDailyViews?: Prisma.FilmDailyViewUpdateManyWithoutFilmNestedInput
 }
 
 export type FilmUncheckedUpdateWithoutGenresInput = {
@@ -1041,6 +1104,7 @@ export type FilmUncheckedUpdateWithoutGenresInput = {
   vote_count?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   popularity?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   runtime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  views?: Prisma.IntFieldUpdateOperationsInput | number
   trailer_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1048,6 +1112,129 @@ export type FilmUncheckedUpdateWithoutGenresInput = {
   directors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   cast?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   seasons?: Prisma.SeasonUncheckedUpdateManyWithoutFilmNestedInput
+  filmDailyViews?: Prisma.FilmDailyViewUncheckedUpdateManyWithoutFilmNestedInput
+}
+
+export type FilmCreateWithoutFilmDailyViewsInput = {
+  tmdb_id: number
+  title: string
+  original_title: string
+  slug: string
+  overview?: string | null
+  poster_path?: string | null
+  backdrop_path?: string | null
+  release_date?: Date | string | null
+  type: $Enums.FilmType
+  status: $Enums.FilmStatus
+  rating?: number | null
+  vote_count?: number | null
+  popularity?: number | null
+  runtime?: number | null
+  views?: number
+  trailer_key?: string | null
+  is_active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string
+  directors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  cast?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  seasons?: Prisma.SeasonCreateNestedManyWithoutFilmInput
+  genres?: Prisma.FilmGenreCreateNestedManyWithoutFilmInput
+}
+
+export type FilmUncheckedCreateWithoutFilmDailyViewsInput = {
+  id?: number
+  tmdb_id: number
+  title: string
+  original_title: string
+  slug: string
+  overview?: string | null
+  poster_path?: string | null
+  backdrop_path?: string | null
+  release_date?: Date | string | null
+  type: $Enums.FilmType
+  status: $Enums.FilmStatus
+  rating?: number | null
+  vote_count?: number | null
+  popularity?: number | null
+  runtime?: number | null
+  views?: number
+  trailer_key?: string | null
+  is_active?: boolean
+  created_at?: Date | string
+  updated_at?: Date | string
+  directors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  cast?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  seasons?: Prisma.SeasonUncheckedCreateNestedManyWithoutFilmInput
+  genres?: Prisma.FilmGenreUncheckedCreateNestedManyWithoutFilmInput
+}
+
+export type FilmCreateOrConnectWithoutFilmDailyViewsInput = {
+  where: Prisma.FilmWhereUniqueInput
+  create: Prisma.XOR<Prisma.FilmCreateWithoutFilmDailyViewsInput, Prisma.FilmUncheckedCreateWithoutFilmDailyViewsInput>
+}
+
+export type FilmUpsertWithoutFilmDailyViewsInput = {
+  update: Prisma.XOR<Prisma.FilmUpdateWithoutFilmDailyViewsInput, Prisma.FilmUncheckedUpdateWithoutFilmDailyViewsInput>
+  create: Prisma.XOR<Prisma.FilmCreateWithoutFilmDailyViewsInput, Prisma.FilmUncheckedCreateWithoutFilmDailyViewsInput>
+  where?: Prisma.FilmWhereInput
+}
+
+export type FilmUpdateToOneWithWhereWithoutFilmDailyViewsInput = {
+  where?: Prisma.FilmWhereInput
+  data: Prisma.XOR<Prisma.FilmUpdateWithoutFilmDailyViewsInput, Prisma.FilmUncheckedUpdateWithoutFilmDailyViewsInput>
+}
+
+export type FilmUpdateWithoutFilmDailyViewsInput = {
+  tmdb_id?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  original_title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  overview?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  poster_path?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backdrop_path?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  release_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  type?: Prisma.EnumFilmTypeFieldUpdateOperationsInput | $Enums.FilmType
+  status?: Prisma.EnumFilmStatusFieldUpdateOperationsInput | $Enums.FilmStatus
+  rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  vote_count?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  popularity?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  runtime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  views?: Prisma.IntFieldUpdateOperationsInput | number
+  trailer_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  directors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  cast?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  seasons?: Prisma.SeasonUpdateManyWithoutFilmNestedInput
+  genres?: Prisma.FilmGenreUpdateManyWithoutFilmNestedInput
+}
+
+export type FilmUncheckedUpdateWithoutFilmDailyViewsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tmdb_id?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  original_title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  overview?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  poster_path?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backdrop_path?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  release_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  type?: Prisma.EnumFilmTypeFieldUpdateOperationsInput | $Enums.FilmType
+  status?: Prisma.EnumFilmStatusFieldUpdateOperationsInput | $Enums.FilmStatus
+  rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  vote_count?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  popularity?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  runtime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  views?: Prisma.IntFieldUpdateOperationsInput | number
+  trailer_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  directors?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  cast?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  seasons?: Prisma.SeasonUncheckedUpdateManyWithoutFilmNestedInput
+  genres?: Prisma.FilmGenreUncheckedUpdateManyWithoutFilmNestedInput
 }
 
 
@@ -1058,11 +1245,13 @@ export type FilmUncheckedUpdateWithoutGenresInput = {
 export type FilmCountOutputType = {
   seasons: number
   genres: number
+  filmDailyViews: number
 }
 
 export type FilmCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   seasons?: boolean | FilmCountOutputTypeCountSeasonsArgs
   genres?: boolean | FilmCountOutputTypeCountGenresArgs
+  filmDailyViews?: boolean | FilmCountOutputTypeCountFilmDailyViewsArgs
 }
 
 /**
@@ -1089,6 +1278,13 @@ export type FilmCountOutputTypeCountGenresArgs<ExtArgs extends runtime.Types.Ext
   where?: Prisma.FilmGenreWhereInput
 }
 
+/**
+ * FilmCountOutputType without action
+ */
+export type FilmCountOutputTypeCountFilmDailyViewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FilmDailyViewWhereInput
+}
+
 
 export type FilmSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1106,6 +1302,7 @@ export type FilmSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   vote_count?: boolean
   popularity?: boolean
   runtime?: boolean
+  views?: boolean
   trailer_key?: boolean
   is_active?: boolean
   created_at?: boolean
@@ -1114,6 +1311,7 @@ export type FilmSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   cast?: boolean
   seasons?: boolean | Prisma.Film$seasonsArgs<ExtArgs>
   genres?: boolean | Prisma.Film$genresArgs<ExtArgs>
+  filmDailyViews?: boolean | Prisma.Film$filmDailyViewsArgs<ExtArgs>
   _count?: boolean | Prisma.FilmCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["film"]>
 
@@ -1135,6 +1333,7 @@ export type FilmSelectScalar = {
   vote_count?: boolean
   popularity?: boolean
   runtime?: boolean
+  views?: boolean
   trailer_key?: boolean
   is_active?: boolean
   created_at?: boolean
@@ -1143,10 +1342,11 @@ export type FilmSelectScalar = {
   cast?: boolean
 }
 
-export type FilmOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tmdb_id" | "title" | "original_title" | "slug" | "overview" | "poster_path" | "backdrop_path" | "release_date" | "type" | "status" | "rating" | "vote_count" | "popularity" | "runtime" | "trailer_key" | "is_active" | "created_at" | "updated_at" | "directors" | "cast", ExtArgs["result"]["film"]>
+export type FilmOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tmdb_id" | "title" | "original_title" | "slug" | "overview" | "poster_path" | "backdrop_path" | "release_date" | "type" | "status" | "rating" | "vote_count" | "popularity" | "runtime" | "views" | "trailer_key" | "is_active" | "created_at" | "updated_at" | "directors" | "cast", ExtArgs["result"]["film"]>
 export type FilmInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   seasons?: boolean | Prisma.Film$seasonsArgs<ExtArgs>
   genres?: boolean | Prisma.Film$genresArgs<ExtArgs>
+  filmDailyViews?: boolean | Prisma.Film$filmDailyViewsArgs<ExtArgs>
   _count?: boolean | Prisma.FilmCountOutputTypeDefaultArgs<ExtArgs>
 }
 
@@ -1155,6 +1355,7 @@ export type $FilmPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     seasons: Prisma.$SeasonPayload<ExtArgs>[]
     genres: Prisma.$FilmGenrePayload<ExtArgs>[]
+    filmDailyViews: Prisma.$FilmDailyViewPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1172,6 +1373,7 @@ export type $FilmPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     vote_count: number | null
     popularity: number | null
     runtime: number | null
+    views: number
     trailer_key: string | null
     is_active: boolean
     created_at: Date
@@ -1520,6 +1722,7 @@ export interface Prisma__FilmClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   seasons<T extends Prisma.Film$seasonsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Film$seasonsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SeasonPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   genres<T extends Prisma.Film$genresArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Film$genresArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FilmGenrePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  filmDailyViews<T extends Prisma.Film$filmDailyViewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Film$filmDailyViewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FilmDailyViewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1564,6 +1767,7 @@ export interface FilmFieldRefs {
   readonly vote_count: Prisma.FieldRef<"Film", 'Int'>
   readonly popularity: Prisma.FieldRef<"Film", 'Float'>
   readonly runtime: Prisma.FieldRef<"Film", 'Int'>
+  readonly views: Prisma.FieldRef<"Film", 'Int'>
   readonly trailer_key: Prisma.FieldRef<"Film", 'String'>
   readonly is_active: Prisma.FieldRef<"Film", 'Boolean'>
   readonly created_at: Prisma.FieldRef<"Film", 'DateTime'>
@@ -1958,6 +2162,30 @@ export type Film$genresArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   distinct?: Prisma.FilmGenreScalarFieldEnum | Prisma.FilmGenreScalarFieldEnum[]
+}
+
+/**
+ * Film.filmDailyViews
+ */
+export type Film$filmDailyViewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FilmDailyView
+   */
+  select?: Prisma.FilmDailyViewSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FilmDailyView
+   */
+  omit?: Prisma.FilmDailyViewOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FilmDailyViewInclude<ExtArgs> | null
+  where?: Prisma.FilmDailyViewWhereInput
+  orderBy?: Prisma.FilmDailyViewOrderByWithRelationInput | Prisma.FilmDailyViewOrderByWithRelationInput[]
+  cursor?: Prisma.FilmDailyViewWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FilmDailyViewScalarFieldEnum | Prisma.FilmDailyViewScalarFieldEnum[]
 }
 
 /**

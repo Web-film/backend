@@ -56,7 +56,7 @@ export const ModelName = {
   Episode: 'Episode',
   Genre: 'Genre',
   FilmGenre: 'FilmGenre',
-  EpisodeView: 'EpisodeView'
+  FilmDailyView: 'FilmDailyView'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -91,6 +91,7 @@ export const FilmScalarFieldEnum = {
   vote_count: 'vote_count',
   popularity: 'popularity',
   runtime: 'runtime',
+  views: 'views',
   trailer_key: 'trailer_key',
   is_active: 'is_active',
   created_at: 'created_at',
@@ -131,7 +132,8 @@ export const EpisodeScalarFieldEnum = {
   still_path: 'still_path',
   video_key: 'video_key',
   created_at: 'created_at',
-  updated_at: 'updated_at'
+  updated_at: 'updated_at',
+  views: 'views'
 } as const
 
 export type EpisodeScalarFieldEnum = (typeof EpisodeScalarFieldEnum)[keyof typeof EpisodeScalarFieldEnum]
@@ -154,14 +156,14 @@ export const FilmGenreScalarFieldEnum = {
 export type FilmGenreScalarFieldEnum = (typeof FilmGenreScalarFieldEnum)[keyof typeof FilmGenreScalarFieldEnum]
 
 
-export const EpisodeViewScalarFieldEnum = {
+export const FilmDailyViewScalarFieldEnum = {
   id: 'id',
-  episode_id: 'episode_id',
+  film_id: 'film_id',
   view_date: 'view_date',
   views: 'views'
 } as const
 
-export type EpisodeViewScalarFieldEnum = (typeof EpisodeViewScalarFieldEnum)[keyof typeof EpisodeViewScalarFieldEnum]
+export type FilmDailyViewScalarFieldEnum = (typeof FilmDailyViewScalarFieldEnum)[keyof typeof FilmDailyViewScalarFieldEnum]
 
 
 export const SortOrder = {

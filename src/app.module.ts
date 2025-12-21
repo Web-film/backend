@@ -3,7 +3,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
-import { EpisodeViewsModule } from '@src/modules/episode-views/episode-views.module';
 import { EpisodesModule } from '@src/modules/episodes/episodes.module';
 import { FilmGenresModule } from '@src/modules/film-genres/film-genres.module';
 import { FilmsModule } from '@src/modules/films/films.module';
@@ -17,7 +16,6 @@ import { PrismaService } from '@src/prisma.service';
     ScheduleModule.forRoot(),
     ConfigModule.forRoot(),
     TasksModule,
-    EpisodeViewsModule,
     EpisodesModule,
     FilmGenresModule,
     FilmsModule,

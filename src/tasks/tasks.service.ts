@@ -3,6 +3,7 @@ import { Prisma } from '@src/generated/prisma/client';
 import { TmdbService } from '@src/integrations/tmdb/tmdb.service';
 import { FilmsResponse } from '@src/integrations/tmdb/tmdb.types';
 import { EpisodesService } from '@src/modules/episodes/episodes.service';
+import { FilmDailyViewService } from '@src/modules/film-daily-view/film-daily-view.service';
 import { FilmsService } from '@src/modules/films/films.service';
 import { GenresService } from '@src/modules/genres/genres.service';
 import { SeasonsService } from '@src/modules/seasons/seasons.service';
@@ -18,6 +19,7 @@ export class TasksService {
     private readonly tmdbService: TmdbService,
     private readonly seasonsService: SeasonsService,
     private readonly episodesService: EpisodesService,
+    private readonly filmDailyViewService: FilmDailyViewService,
   ) {}
 
   // Xử lý cron lấy toàn bộ thể loại hiện có
@@ -361,5 +363,22 @@ export class TasksService {
     }
 
     console.log('Done syncMovieRuntimes');
+  }
+
+  //cron xóa view ngày tháng cũ
+  async cleanOldFilmDailyViews() {
+    try {
+      const oneMonthAgo = new Date();
+      oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+      oneMonthAgo.setHours(0, 0, 0, 0);
+
+      await this.filmDailyViewService.deleteBefore(oneMonthAgo);
+
+      this.logger.log(
+        `Deleted FilmDailyView records older than ${oneMonthAgo.toISOString()}`,
+      );
+    } catch (error) {
+      this.logger.error('Failed to clean FilmDailyView', error);
+    }
   }
 }

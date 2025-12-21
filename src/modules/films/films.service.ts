@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Prisma } from '@src/generated/prisma/client';
 import { FilmType } from '@src/generated/prisma/enums';
 import { TmdbMovie } from '@src/integrations/tmdb/tmdb.types';
@@ -130,6 +130,56 @@ export class FilmsService {
     });
 
     return film;
+  }
+
+  async increaseViewFilm(id: string) {
+    const filmId = Number(id);
+    if (Number.isNaN(filmId)) {
+      throw new BadRequestException('id film không hợp lệ');
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    return await this.prisma.$transaction(async (tx) => {
+      const filmExists = await tx.film.findFirst({
+        where: {
+          id: filmId,
+          type: FilmType.movie,
+        },
+        select: { id: true },
+      });
+
+      if (!filmExists) {
+        throw new BadRequestException('id film không hợp lệ');
+      }
+
+      const film = await tx.film.update({
+        where: { id: filmId },
+        data: {
+          views: { increment: 1 },
+        },
+      });
+
+      await tx.filmDailyView.upsert({
+        where: {
+          film_id_view_date: {
+            film_id: filmId,
+            view_date: today,
+          },
+        },
+        update: {
+          views: { increment: 1 },
+        },
+        create: {
+          film_id: filmId,
+          view_date: today,
+          views: 1,
+        },
+      });
+
+      return film;
+    });
   }
 
   // Phần cron

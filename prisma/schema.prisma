@@ -30,15 +30,17 @@ model Film {
   vote_count     Int?
   popularity     Float?
   runtime        Int?
+  views  Int      @default(0)
   trailer_key    String?    @db.VarChar(50)
   is_active      Boolean    @default(true)
   created_at     DateTime   @default(now())
   updated_at     DateTime   @updatedAt
 
-  seasons   Season[]
-  genres    FilmGenre[]
-  directors Json?
-  cast      Json?
+  seasons        Season[]
+  genres         FilmGenre[]
+  directors      Json?
+  cast           Json?
+  filmDailyViews FilmDailyView[]
 }
 
 model Season {
@@ -71,9 +73,9 @@ model Episode {
   video_key       String?   @db.VarChar(50)
   created_at      DateTime  @default(now())
   updated_at      DateTime  @updatedAt
+  views  Int      @default(0)
 
   season Season        @relation(fields: [season_id], references: [id])
-  views  EpisodeView[]
 }
 
 model Genre {
@@ -94,13 +96,16 @@ model FilmGenre {
   @@id([film_id, genre_id])
 }
 
-model EpisodeView {
-  id         Int      @id @default(autoincrement())
-  episode_id Int
-  view_date  DateTime
-  views      Int      @default(1)
+model FilmDailyView {
+  id        Int      @id @default(autoincrement())
+  film_id   Int
+  view_date DateTime @db.Date
+  views     Int      @default(0)
 
-  episode Episode @relation(fields: [episode_id], references: [id])
+  film Film @relation(fields: [film_id], references: [id])
+
+  @@unique([film_id, view_date])
+  @@index([view_date])
 }
 
 // ENUMs
