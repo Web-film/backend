@@ -10,6 +10,7 @@ import {
 import {
   GetFilmDto,
   GetFilmNewDto,
+  GetFilmNewUpdateDto,
   GetFilmPopularDto,
 } from '@src/modules/films/dto/getDto.dto';
 import { FilmsService } from '@src/modules/films/films.service';
@@ -40,25 +41,6 @@ export class FilmsController {
     }
   }
 
-  @Get('/:id')
-  async getFilmDetail(@Param('id', ParseIntPipe) id: number) {
-    try {
-      const film = await this.filmsService.getFilmDetail(id);
-
-      return {
-        status: 200,
-        message: 'Lấy chi tiết phim thành công',
-        data: film,
-      };
-    } catch (error) {
-      return {
-        status: 404,
-        message: 'Lấy chi tiết phim thất bại',
-        error: (error as Error).message,
-      };
-    }
-  }
-
   @Get('/new')
   async getFilmNew(
     @Query(new ValidationPipe({ transform: true }))
@@ -66,6 +48,28 @@ export class FilmsController {
   ) {
     try {
       const data = await this.filmsService.getFilmNew(query);
+
+      return {
+        status: 200,
+        message: 'Lấy danh sách phim mới thành công',
+        data,
+      };
+    } catch (error) {
+      return {
+        status: 404,
+        message: 'Lấy danh sách phim mới thất bại',
+        error: (error as Error).message,
+      };
+    }
+  }
+
+  @Get('/newUpdate')
+  async getFilmNewUpdate(
+    @Query(new ValidationPipe({ transform: true }))
+    query: GetFilmNewUpdateDto,
+  ) {
+    try {
+      const data = await this.filmsService.getFilmNewUpdate(query);
 
       return {
         status: 200,
@@ -108,6 +112,24 @@ export class FilmsController {
     return this.filmsService.getLastReleaseDate();
   }
 
+  @Get('/:id')
+  async getFilmDetail(@Param('id', ParseIntPipe) id: number) {
+    try {
+      const film = await this.filmsService.getFilmDetail(id);
+
+      return {
+        status: 200,
+        message: 'Lấy chi tiết phim thành công',
+        data: film,
+      };
+    } catch (error) {
+      return {
+        status: 404,
+        message: 'Lấy chi tiết phim thất bại',
+        error: (error as Error).message,
+      };
+    }
+  }
   @Put('/increaseView/:id')
   async increaseViewEpisodes(@Param('id') id: string) {
     try {

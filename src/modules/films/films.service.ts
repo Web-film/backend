@@ -6,6 +6,7 @@ import { FilmGenresService } from '@src/modules/film-genres/film-genres.service'
 import {
   GetFilmDto,
   GetFilmNewDto,
+  GetFilmNewUpdateDto,
   GetFilmPopularDto,
 } from '@src/modules/films/dto/getDto.dto';
 import { GenresService } from '@src/modules/genres/genres.service';
@@ -66,7 +67,7 @@ export class FilmsService {
     };
   }
 
-  async getFilmNew(query: GetFilmPopularDto) {
+  async getFilmNew(query: GetFilmNewDto) {
     const limit = query?.limit || 20;
     const page = query?.page || 1;
     const skip = (page - 1) * limit;
@@ -77,6 +78,9 @@ export class FilmsService {
         take: limit,
         skip: skip,
         orderBy: { release_date: 'desc' },
+        include: {
+          genres: { include: { genre: true } },
+        },
       }),
     ]);
     const hasNextPage = page * limit < total;
@@ -92,7 +96,7 @@ export class FilmsService {
     };
   }
 
-  async getFilmPopular(query: GetFilmNewDto) {
+  async getFilmNewUpdate(query: GetFilmNewUpdateDto) {
     const limit = query?.limit || 20;
     const page = query?.page || 1;
     const skip = (page - 1) * limit;
@@ -102,7 +106,7 @@ export class FilmsService {
       this.prisma.film.findMany({
         take: limit,
         skip: skip,
-        orderBy: { popularity: 'desc' },
+        orderBy: { updated_at: 'desc' },
       }),
     ]);
     const hasNextPage = page * limit < total;
@@ -114,6 +118,42 @@ export class FilmsService {
         limit,
         totalPages: Math.ceil(total / limit),
         hasNextPage,
+      },
+    };
+  }
+
+  async getFilmPopular(query: GetFilmPopularDto) {
+    const limit = query.limit || 20;
+    const page = query.page || 1;
+    const offset = (page - 1) * limit;
+
+    const items = await this.prisma.$queryRaw<any[]>`
+      SELECT f.*
+      FROM film f
+      JOIN (
+        SELECT film_id, SUM(views) AS total_views
+        FROM filmdailyview
+        WHERE view_date >= NOW() - INTERVAL 7 DAY
+        GROUP BY film_id
+        ORDER BY total_views DESC
+        LIMIT ${limit} OFFSET ${offset}
+      ) fdv ON fdv.film_id = f.id
+      ORDER BY fdv.total_views DESC
+    `;
+
+    const total = await this.prisma.$queryRaw<any[]>`
+      SELECT COUNT(DISTINCT film_id) AS count
+      FROM filmdailyview
+      WHERE view_date >= NOW() - INTERVAL 7 DAY
+    `;
+    return {
+      items,
+      pagination: {
+        total: Number(total[0].count),
+        page,
+        limit,
+        totalPages: Math.ceil(Number(total[0].count) / limit),
+        hasNextPage: page * limit < Number(total[0].count),
       },
     };
   }

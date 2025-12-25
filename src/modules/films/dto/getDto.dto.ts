@@ -20,6 +20,20 @@ export class GetFilmNewDto {
   page?: number;
 }
 
+export class GetFilmNewUpdateDto {
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt({ message: 'limit phải là số nguyên' })
+  @Min(1, { message: 'limit phải >= 1' })
+  limit?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt({ message: 'page phải là số nguyên' })
+  @Min(1, { message: 'page phải >= 1' })
+  page?: number;
+}
+
 export class GetFilmPopularDto {
   @IsOptional()
   @Type(() => Number)
