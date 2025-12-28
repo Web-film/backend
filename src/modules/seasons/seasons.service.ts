@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { TmdbSeason } from '@src/integrations/tmdb/tmdb.types';
 import {
+  CheckEpisodeDto,
   GetSeasonsByFilmDto,
   GetSeasonsDto,
 } from '@src/modules/seasons/dto/getDto.dto';
@@ -38,12 +39,56 @@ export class SeasonsService {
     };
   }
 
+  async getSeasonsById(id: number) {
+    const items = await this.prisma.season.findUnique({
+      where: {
+        id: Number(id),
+      },
+      include: {
+        film: {
+          include: {
+            genres: {
+              include: {
+                genre: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return { items };
+  }
+
   async getSeasonsByFilm(query: GetSeasonsByFilmDto) {
     const film = await this.prisma.season.findMany({
       where: { film_id: query.film_id },
     });
 
     return film;
+  }
+
+  async checkEpisode(query: CheckEpisodeDto) {
+    const season = await this.prisma.season.findFirst({
+      where: { id: query.season_id },
+    });
+
+    if (!season) {
+      return null;
+    }
+
+    const episode = await this.prisma.episode.findFirst({
+      where: {
+        id: query.episode_id,
+        season_id: query.season_id,
+      },
+    });
+
+    if (!episode) {
+      return null;
+    }
+
+    return season;
   }
 
   // cron

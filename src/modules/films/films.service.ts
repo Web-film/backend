@@ -38,6 +38,22 @@ export class FilmsService {
             },
           }
         : {}),
+      ...(query.search
+        ? {
+            OR: [
+              {
+                title: {
+                  contains: query.search,
+                },
+              },
+              {
+                original_title: {
+                  contains: query.search,
+                },
+              },
+            ],
+          }
+        : {}),
     };
 
     const [total, items] = await Promise.all([

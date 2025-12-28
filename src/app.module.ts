@@ -10,6 +10,8 @@ import { GenresModule } from '@src/modules/genres/genres.module';
 import { SeasonsModule } from '@src/modules/seasons/seasons.module';
 import { TasksModule } from '@src/tasks/tasks.module';
 import { PrismaService } from '@src/prisma.service';
+// import { GetDataService } from '@src/scripts/getData.service';
+// import { TmdbService } from '@src/integrations/tmdb/tmdb.service';
 
 @Module({
   imports: [
@@ -23,6 +25,11 @@ import { PrismaService } from '@src/prisma.service';
     SeasonsModule,
   ],
   controllers: [AppController],
-  providers: [AppService, PrismaService],
+  providers: [
+    AppService,
+    PrismaService,
+    // GetDataService,
+    // TmdbService
+  ],
 })
 export class AppModule {}

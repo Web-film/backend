@@ -1,5 +1,13 @@
-import { Controller, Get, Query, ValidationPipe } from '@nestjs/common';
 import {
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Query,
+  ValidationPipe,
+} from '@nestjs/common';
+import {
+  CheckEpisodeDto,
   GetSeasonsByFilmDto,
   GetSeasonsDto,
 } from '@src/modules/seasons/dto/getDto.dto';
@@ -56,5 +64,46 @@ export class SeasonsController {
   @Get('/getTodaySeasons')
   getTodaySeasons() {
     this.seasonsService.getTodaySeasons();
+  }
+
+  @Get('/checkEpisode')
+  async checkEpisode(
+    @Query(new ValidationPipe({ transform: true }))
+    query: CheckEpisodeDto,
+  ) {
+    try {
+      const film = await this.seasonsService.checkEpisode(query);
+
+      return {
+        status: 200,
+        message: 'Lấy chi tiết phim thành công',
+        data: film,
+      };
+    } catch (error) {
+      return {
+        status: 404,
+        message: 'Lấy chi tiết phim thất bại',
+        error: (error as Error).message,
+      };
+    }
+  }
+
+  @Get('/:id')
+  async getSeasonsById(@Param('id', ParseIntPipe) id: number) {
+    try {
+      const film = await this.seasonsService.getSeasonsById(id);
+
+      return {
+        status: 200,
+        message: 'Lấy chi tiết mùa thành công',
+        data: film,
+      };
+    } catch (error) {
+      return {
+        status: 404,
+        message: 'Lấy chi mùa phim thất bại',
+        error: (error as Error).message,
+      };
+    }
   }
 }

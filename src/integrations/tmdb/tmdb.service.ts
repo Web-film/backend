@@ -137,6 +137,23 @@ export class TmdbService {
     return { directors, cast };
   }
 
+  async getTvCredits(
+    tmdbId: number,
+  ): Promise<{ directors: any[]; cast: any[] }> {
+    const res = await this.client.request<TmdbCredits>({
+      url: `tv/${tmdbId}/credits`,
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${process.env.TMDB_ACCESS_TOKEN}`,
+      },
+    });
+
+    const directors = res.data.crew.filter((c) => c.job === 'Director');
+    const cast = res.data.cast.sort((a, b) => a.order - b.order).slice(0, 10);
+
+    return { directors, cast };
+  }
+
   // lấy ra trailer phim lẻ
   async getMovieTrailer(tmdbId: number): Promise<string | null> {
     const res = await this.client.request<TmdbVideoResponse>({

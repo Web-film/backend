@@ -69,4 +69,8 @@ export class GetFilmDto {
   @IsOptional()
   @IsEnum(FilmTypeEnum, { message: 'type phải là movie hoặc tv' })
   type?: FilmTypeEnum;
+
+  @IsOptional()
+  @Type(() => String)
+  search?: string;
 }

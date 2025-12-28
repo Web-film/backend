@@ -21,3 +21,17 @@ export class GetSeasonsDto {
   @Min(1, { message: 'page phải >= 1' })
   page?: number;
 }
+
+export class CheckEpisodeDto {
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt({ message: 'Id mùa phim không hợp lệ' })
+  @Min(1, { message: 'Id mùa phim phải >= 1' })
+  season_id?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt({ message: 'Id phim không hợp lệ' })
+  @Min(1, { message: 'Id phim phải >= 1' })
+  episode_id?: number;
+}
