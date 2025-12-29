@@ -68,7 +68,6 @@ export class FilmsService {
         },
       }),
     ]);
-
     const hasNextPage = page * limit < total;
 
     return {
@@ -144,24 +143,39 @@ export class FilmsService {
     const offset = (page - 1) * limit;
 
     const items = await this.prisma.$queryRaw<any[]>`
-      SELECT f.*
+    (
+      SELECT f.*, SUM(fdv.views) AS total_views
       FROM film f
-      JOIN (
-        SELECT film_id, SUM(views) AS total_views
+      JOIN filmdailyview fdv ON fdv.film_id = f.id
+      WHERE fdv.view_date >= NOW() - INTERVAL 7 DAY
+      GROUP BY f.id
+      ORDER BY total_views DESC
+      LIMIT ${limit} OFFSET ${offset}
+    )
+
+    UNION ALL
+
+    (
+      SELECT f.*, 0 AS total_views
+      FROM film f
+      WHERE f.id NOT IN (
+        SELECT film_id
         FROM filmdailyview
         WHERE view_date >= NOW() - INTERVAL 7 DAY
-        GROUP BY film_id
-        ORDER BY total_views DESC
-        LIMIT ${limit} OFFSET ${offset}
-      ) fdv ON fdv.film_id = f.id
-      ORDER BY fdv.total_views DESC
-    `;
+      )
+      ORDER BY f.created_at DESC
+      LIMIT ${limit}
+    )
+
+    LIMIT ${limit};
+  `;
 
     const total = await this.prisma.$queryRaw<any[]>`
-      SELECT COUNT(DISTINCT film_id) AS count
-      FROM filmdailyview
-      WHERE view_date >= NOW() - INTERVAL 7 DAY
-    `;
+    SELECT COUNT(DISTINCT film_id) AS count
+    FROM filmdailyview
+    WHERE view_date >= NOW() - INTERVAL 7 DAY
+  `;
+
     return {
       items,
       pagination: {

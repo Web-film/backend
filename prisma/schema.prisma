@@ -41,6 +41,8 @@ model Film {
   directors      Json?
   cast           Json?
   filmDailyViews FilmDailyView[]
+
+  @@map("film")
 }
 
 model Season {
@@ -58,6 +60,8 @@ model Season {
 
   film     Film      @relation(fields: [film_id], references: [id])
   episodes Episode[]
+
+  @@map("season")
 }
 
 model Episode {
@@ -76,6 +80,8 @@ model Episode {
   views  Int      @default(0)
 
   season Season        @relation(fields: [season_id], references: [id])
+
+  @@map("episode")
 }
 
 model Genre {
@@ -84,6 +90,7 @@ model Genre {
   name    String @db.VarChar(100)
 
   films FilmGenre[]
+  @@map("genre")
 }
 
 model FilmGenre {
@@ -94,6 +101,7 @@ model FilmGenre {
   genre Genre @relation(fields: [genre_id], references: [id])
 
   @@id([film_id, genre_id])
+  @@map("filmgenre")
 }
 
 model FilmDailyView {
@@ -106,6 +114,7 @@ model FilmDailyView {
 
   @@unique([film_id, view_date])
   @@index([view_date])
+  @@map("filmdailyview")
 }
 
 // ENUMs
