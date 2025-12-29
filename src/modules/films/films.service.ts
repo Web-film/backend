@@ -142,48 +142,74 @@ export class FilmsService {
     const page = query.page || 1;
     const offset = (page - 1) * limit;
 
-    const items = await this.prisma.$queryRaw<any[]>`
-    (
-      SELECT f.*, SUM(fdv.views) AS total_views
-      FROM film f
-      JOIN filmdailyview fdv ON fdv.film_id = f.id
-      WHERE fdv.view_date >= NOW() - INTERVAL 7 DAY
-      GROUP BY f.id
-      ORDER BY total_views DESC
-      LIMIT ${limit} OFFSET ${offset}
-    )
+    let popularFilms = await this.prisma.$queryRaw<any[]>`
+    SELECT 
+      f.id,
+      f.tmdb_id,
+      f.title,
+      f.original_title,
+      f.slug,
+      CAST(f.overview AS CHAR) AS overview,
+      f.poster_path,
+      f.backdrop_path,
+      f.release_date,
+      f.type,
+      CAST(f.directors AS CHAR) AS directors,
+      CAST(f.cast AS CHAR) AS cast,
+      COALESCE(SUM(fdv.views), 0) AS total_views
+    FROM film f
+    LEFT JOIN filmdailyview fdv
+      ON fdv.film_id = f.id
+      AND fdv.view_date >= NOW() - INTERVAL 7 DAY
+    GROUP BY f.id
+    ORDER BY total_views DESC
+    LIMIT ${limit} OFFSET ${offset};
+  `;
 
-    UNION ALL
-
-    (
-      SELECT f.*, 0 AS total_views
+    const remaining = limit - popularFilms.length;
+    if (remaining > 0) {
+      const popularIds = popularFilms.map((f) => f.id);
+      const additionalFilms = await this.prisma.$queryRaw<any[]>`
+      SELECT 
+        f.id,
+        f.tmdb_id,
+        f.title,
+        f.original_title,
+        f.slug,
+        CAST(f.overview AS CHAR) AS overview,
+        f.poster_path,
+        f.backdrop_path,
+        f.release_date,
+        f.type,
+        f.views,
+        CAST(f.directors AS CHAR) AS directors,
+        CAST(f.cast AS CHAR) AS cast,
+        0 AS total_views
       FROM film f
-      WHERE f.id NOT IN (
-        SELECT film_id
-        FROM filmdailyview
-        WHERE view_date >= NOW() - INTERVAL 7 DAY
-      )
+      WHERE f.id NOT IN (${popularIds.length > 0 ? popularIds.join(',') : 0})
       ORDER BY f.created_at DESC
-      LIMIT ${limit}
-    )
+      LIMIT ${remaining};
+    `;
+      popularFilms = [...popularFilms, ...additionalFilms];
+    }
 
-    LIMIT ${limit};
+    const totalCountResult = await this.prisma.$queryRaw<any[]>`
+    SELECT COUNT(DISTINCT f.id) AS count
+    FROM film f
+    LEFT JOIN filmdailyview fdv
+      ON fdv.film_id = f.id
+      AND fdv.view_date >= NOW() - INTERVAL 7 DAY;
   `;
-
-    const total = await this.prisma.$queryRaw<any[]>`
-    SELECT COUNT(DISTINCT film_id) AS count
-    FROM filmdailyview
-    WHERE view_date >= NOW() - INTERVAL 7 DAY
-  `;
+    const totalCount = Number(totalCountResult[0]?.count || 0);
 
     return {
-      items,
+      items: popularFilms,
       pagination: {
-        total: Number(total[0].count),
+        total: totalCount,
         page,
         limit,
-        totalPages: Math.ceil(Number(total[0].count) / limit),
-        hasNextPage: page * limit < Number(total[0].count),
+        totalPages: Math.ceil(totalCount / limit),
+        hasNextPage: page * limit < totalCount,
       },
     };
   }
